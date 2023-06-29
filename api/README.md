@@ -14,7 +14,7 @@ export ANTHROPIC_API_KEY=
 
 Start local server:
 ```
-uvicorn evaluator_app:app
+uvicorn main:app
 ```
 
 `Disclaimer: You will not be able to use all the models unless you have the corresponding API key (e.g., Anthropic).`

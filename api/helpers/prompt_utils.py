@@ -15,7 +15,7 @@ def remove_citations(text: str) -> str:
     text = re.sub(r'\[[0-9,-]+(,\s[0-9,-]+)*\]', '', text)
     return text
 
-template = """You are a teacher grading a quiz. 
+grade_answer_prompt_template = """You are a teacher grading a quiz.
 You are given a question, the student's answer, and the true answer, and are asked to score the student answer as either Correct or Incorrect.
 
 Example Format:
@@ -38,9 +38,9 @@ GRADE: (Correct or Incorrect)
 JUSTIFICATION: (Without mentioning the student/teacher framing of this prompt, explain why the STUDENT ANSWER is Correct or Incorrect. Use one or two sentences maximum. Keep the answer as concise as possible.)
 """
 
-GRADE_ANSWER_PROMPT = PromptTemplate(input_variables=["query", "result", "answer"], template=template)
+GRADE_ANSWER_PROMPT = PromptTemplate(input_variables=["query", "result", "answer"], template=grade_answer_prompt_template)
 
-template = """You are a teacher grading a quiz. 
+grade_answer_prompt_fast_template = """You are a teacher grading a quiz. 
 You are given a question, the student's answer, and the true answer, and are asked to score the student answer as either Correct or Incorrect.
 
 Example Format:
@@ -56,9 +56,9 @@ STUDENT ANSWER: {result}
 TRUE ANSWER: {answer}
 GRADE:"""
 
-GRADE_ANSWER_PROMPT_FAST = PromptTemplate(input_variables=["query", "result", "answer"], template=template)
+GRADE_ANSWER_PROMPT_FAST = PromptTemplate(input_variables=["query", "result", "answer"], template=grade_answer_prompt_fast_template)
 
-template = """You are a teacher grading a quiz. 
+grade_answer_prompt_bias_template = """You are a teacher grading a quiz. 
 You are given a question, the student's answer, and the true answer, and are asked to score the student answer as either Correct or Incorrect.
 You are also asked to identify potential sources of bias in the question and in the true answer.
 
@@ -82,9 +82,9 @@ GRADE: (Correct or Incorrect)
 JUSTIFICATION: (Without mentioning the student/teacher framing of this prompt, explain why the STUDENT ANSWER is Correct or Incorrect, identify potential sources of bias in the QUESTION, and identify potential sources of bias in the TRUE ANSWER. Use one or two sentences maximum. Keep the answer as concise as possible.)
 """
 
-GRADE_ANSWER_PROMPT_BIAS_CHECK = PromptTemplate(input_variables=["query", "result", "answer"], template=template)
+GRADE_ANSWER_PROMPT_BIAS_CHECK = PromptTemplate(input_variables=["query", "result", "answer"], template=grade_answer_prompt_bias_template)
 
-template = """You are assessing a submitted student answer to a question relative to the true answer based on the provided criteria: 
+grade_answer_prompt_openai_template = """You are assessing a submitted student answer to a question relative to the true answer based on the provided criteria: 
     
     ***
     QUESTION: {query}
@@ -102,9 +102,9 @@ template = """You are assessing a submitted student answer to a question relativ
     Reasoning:
 """
 
-GRADE_ANSWER_PROMPT_OPENAI = PromptTemplate(input_variables=["query", "result", "answer"], template=template)
+GRADE_ANSWER_PROMPT_OPENAI = PromptTemplate(input_variables=["query", "result", "answer"], template=grade_answer_prompt_openai_template)
 
-template = """ 
+grade_docs_prompt_fast_template = """ 
     Given the question: \n
     {query}
     Here are some documents retrieved in response to the question: \n
@@ -115,9 +115,9 @@ template = """
       relevance: Are the retrieved documents relevant to the question and do they support the answer?"
     Do the retrieved documents meet the criterion? Print "Correct" (without quotes or punctuation) if the retrieved context are relevant or "Incorrect" if not (without quotes or punctuation) on its own line. """
 
-GRADE_DOCS_PROMPT_FAST = PromptTemplate(input_variables=["query", "result", "answer"], template=template)
+GRADE_DOCS_PROMPT_FAST = PromptTemplate(input_variables=["query", "result", "answer"], template=grade_docs_prompt_fast_template)
 
-template = """ 
+grade_docs_prompt_template = """ 
     Given the question: \n
     {query}
     Here are some documents retrieved in response to the question: \n
@@ -134,17 +134,38 @@ template = """
     JUSTIFICATION: (Write out in a step by step manner your reasoning about the criterion to be sure that your conclusion is correct. Use one or two sentences maximum. Keep the answer as concise as possible.)
     """
 
-GRADE_DOCS_PROMPT = PromptTemplate(input_variables=["query", "result", "answer"], template=template)
+GRADE_DOCS_PROMPT = PromptTemplate(input_variables=["query", "result", "answer"], template=grade_docs_prompt_template)
 
 
-template = """Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Use three sentences maximum. Keep the answer as concise as possible.
-{context}
-Question: {question}
-Helpful Answer:"""
+qa_chain_prompt_template = """
+    Use the following pieces of context to answer the question at the end.
+    If you don't know the answer, just say that you don't know, don't try to make up an answer.
+    Use three sentences maximum. Keep the answer as concise as possible.
+    Context information is below. \n
+    ---------------------\n
+    {context_str}
+    ---------------------\n
+    Question: {question}
+"""
 
-QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context", "question"],template=template,)
+qa_chain_prompt_refine_template = """
+    The original question is as follows: {question}\n
+    We have provided an existing answer: {existing_answer}\n
+    We have the opportunity to refine the existing answer (only if needed) with some more context below.\n
+    ------------\n
+    {context_str}\n
+    ------------\n
+    Given the new context, refine the original answer to better answer the question.
+    If the context isn't useful, return the original answer.
+"""
 
-template = """
+QA_CHAIN_PROMPT = PromptTemplate(input_variables=["context_str", "question"],
+                                 template=qa_chain_prompt_template)
+
+REFINE_QA_CHAIN_PROMPT = PromptTemplate(input_variables=["question", "existing_answer", "context_str"],
+                                        template=qa_chain_prompt_refine_template)
+
+qa_chain_prompt_llama_template = """
 ### Human
 You are question-answering assistant tasked with answering questions based on the provided context. 
 
@@ -156,5 +177,4 @@ Use the following pieces of context to answer the question at the end. Use three
 
 ### Assistant
 Answer: Think step by step. """
-QA_CHAIN_PROMPT_LLAMA = PromptTemplate(input_variables=["context", "question"],template=template,)
-
+QA_CHAIN_PROMPT_LLAMA = PromptTemplate(input_variables=["context", "question"],template=qa_chain_prompt_llama_template)
