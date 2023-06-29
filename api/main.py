@@ -5,9 +5,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
-from modules.test import run
 
-from modules.evaluator import run_evaluator
+from modules.evaluator import run
 
 # ===============
 # API setup
