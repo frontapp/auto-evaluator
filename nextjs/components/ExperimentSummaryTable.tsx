@@ -21,6 +21,7 @@ const ExperimentSummaryTable = ({
             <th>Model</th>
             <th>Grading Prompt Style</th>
             <th># of Chunks Retrieved</th>
+            <th>Chain Method Used</th>
             <th>Avg Retrieval Relevancy Score</th>
             <th>Avg Answer Similarity Score</th>
             <th>Avg Latency (s)</th>
@@ -39,6 +40,7 @@ const ExperimentSummaryTable = ({
               <td>{result?.model}</td>
               <td>{result?.gradingPrompt}</td>
               <td>{result?.numNeighbors}</td>
+              <td>{result?.chainMethod}</td>
               <td>{result?.avgRelevancyScore}</td>
               <td>{result?.avgAnswerScore}</td>
               <td>{result?.avgLatency.toFixed(3)}</td>

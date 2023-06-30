@@ -10,6 +10,7 @@ export type FormValues = {
   retriever: string;
   gradingPrompt: string;
   numNeighbors: number;
+  chainMethod: string;
   files: any[];
 };
 
@@ -22,6 +23,7 @@ export type Result = {
   retrievalScore: { score: number; justification: string };
   answerScore: { score: number; justification: string };
   latency: number;
+  docLinks: string;
 };
 
 export type QAPair = {
@@ -39,6 +41,7 @@ export type Experiment = {
   model: string;
   gradingPrompt: string;
   numNeighbors: number;
+  chainMethod: string;
   avgRelevancyScore: number;
   avgAnswerScore: number;
   avgLatency: number;

@@ -199,6 +199,36 @@ const Sidebar = ({ form }: { form: Form }) => {
             />
           </div>
           <div>
+            <Text fz="md">Chain Method</Text>
+            <Controller
+              name="chainMethod"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  data={[
+                    {
+                      label: "Stuff",
+                      value: "stuff",
+                    },
+                    {
+                      label: "Refine",
+                      value: "refine",
+                    },
+                    {
+                      label: "Map-Reduce",
+                      value: "map_reduce",
+                    },
+                    {
+                      label: "Map-Rerank",
+                      value: "map_rerank",
+                    },
+                  ]}
+                />
+              )}
+            />
+          </div>
+          <div>
             <Text fz="md">Grading prompt style</Text>
             <Controller
               name="gradingPrompt"
@@ -212,8 +242,8 @@ const Sidebar = ({ form }: { form: Form }) => {
                       value: "Fast",
                     },
                     {
-                      label: "Descriptive",
-                      value: "Descriptive",
+                      label: "Default",
+                      value: "Default",
                     },
                     {
                       label: "Descriptive w/ bias check",

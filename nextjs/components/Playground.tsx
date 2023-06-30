@@ -162,6 +162,7 @@ const Playground = ({ form }: { form: Form }) => {
     formData.append("model_version", data.model);
     formData.append("grade_prompt", data.gradingPrompt);
     formData.append("num_neighbors", data.numNeighbors.toString());
+    formData.append("chain_method", data.chainMethod);
     formData.append("test_dataset", JSON.stringify(testDataset));
 
     if (!IS_DEV) {
@@ -261,6 +262,7 @@ const Playground = ({ form }: { form: Form }) => {
       model: data.model,
       gradingPrompt: data.gradingPrompt,
       numNeighbors: data.numNeighbors,
+      chainMethod: data.chainMethod,
       avgRelevancyScore,
       avgAnswerScore,
       avgLatency,
@@ -327,6 +329,7 @@ const Playground = ({ form }: { form: Form }) => {
             MIME_TYPES.pdf,
             MIME_TYPES.docx,
             MIME_TYPES.doc,
+            MIME_TYPES.csv,
             "text/plain",
           ]}
           onReject={(files) => {
@@ -378,7 +381,7 @@ const Playground = ({ form }: { form: Form }) => {
                 Upload Text for QA Eval
               </Text>
               <Text size="sm" color="dimmed" mt={7} align="center">
-                {"Attach a file (.txt, .pdf, .doc, .docx)"}
+                {"Attach a file (.txt, .pdf, .doc, .docx, .csv)"}
               </Text>
             </div>
           </Stack>
@@ -566,6 +569,7 @@ const Playground = ({ form }: { form: Form }) => {
                       <td>{result?.model}</td>
                       <td>{result?.gradingPrompt}</td>
                       <td>{result?.numNeighbors}</td>
+                      <td>{result?.chainMethod}</td>
                       <td>{result?.avgRelevancyScore}</td>
                       <td>{result?.avgAnswerScore}</td>
                       <td>{result?.avgLatency.toFixed(3)}</td>
@@ -678,6 +682,7 @@ const Playground = ({ form }: { form: Form }) => {
                     <th>Retrieval Relevancy Score</th>
                     <th>Answer Similarity Score</th>
                     <th>Latency (s)</th>
+                    <th>Retrieved Links</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -729,6 +734,7 @@ const Playground = ({ form }: { form: Form }) => {
                         )}
                       </td>
                       <td>{result?.latency?.toFixed(3)}</td>
+                      <td>{result?.docLinks}</td>
                     </tr>
                   ))}
                 </tbody>

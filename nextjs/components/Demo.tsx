@@ -136,6 +136,7 @@ const Demo = ({ form }: { form: Form }) => {
     formData.append("model_version", data.model);
     formData.append("grade_prompt", data.gradingPrompt);
     formData.append("num_neighbors", data.numNeighbors.toString());
+    formData.append("chain_method", data.chainMethod);
     formData.append("test_dataset", JSON.stringify(testDataset));
 
     if (!IS_DEV) {
@@ -148,6 +149,7 @@ const Demo = ({ form }: { form: Form }) => {
         model: data.model,
         promptStyle: data.gradingPrompt,
         numNeighbors: data.numNeighbors,
+        chainMethod: data.chainMethod,
       });
     }
 
@@ -230,6 +232,7 @@ const Demo = ({ form }: { form: Form }) => {
       model: data.model,
       gradingPrompt: data.gradingPrompt,
       numNeighbors: data.numNeighbors,
+      chainMethod: data.chainMethod,
       avgRelevancyScore,
       avgAnswerScore,
       avgLatency,
